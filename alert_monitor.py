@@ -185,23 +185,38 @@ def run_once(config, token, chat_id, last_alert_time: dict):
 
     messages = []
 
-    # 가격 이상
-    above = alerts_cfg.get("price_above")
-    if above is not None and price >= above and can_alert("price_above"):
-        messages.append(
-            f"🔼 가격 도달\n{symbol} ({name})\n"
-            f"현재 가격: ${price:.6g} (설정: ${above} 이상)"
-        )
-        mark_alert("price_above")
+    def _to_list(v):
+        if v is None:
+            return []
+        return [v] if isinstance(v, (int, float)) else list(v)
 
-    # 가격 이하
-    below = alerts_cfg.get("price_below")
-    if below is not None and price <= below and can_alert("price_below"):
-        messages.append(
-            f"🔽 가격 하락\n{symbol} ({name})\n"
-            f"현재 가격: ${price:.6g} (설정: ${below} 이하)"
-        )
-        mark_alert("price_below")
+    # 가격 이상 (여러 구간 가능)
+    for above in _to_list(alerts_cfg.get("price_above")):
+        try:
+            thresh = float(above)
+        except (TypeError, ValueError):
+            continue
+        key = f"price_above_{thresh}"
+        if price >= thresh and can_alert(key):
+            messages.append(
+                f"🔼 가격 도달\n{symbol} ({name})\n"
+                f"현재 가격: ${price:.6g} (설정: ${thresh} 이상)"
+            )
+            mark_alert(key)
+
+    # 가격 이하 (여러 구간 가능)
+    for below in _to_list(alerts_cfg.get("price_below")):
+        try:
+            thresh = float(below)
+        except (TypeError, ValueError):
+            continue
+        key = f"price_below_{thresh}"
+        if price <= thresh and can_alert(key):
+            messages.append(
+                f"🔽 가격 하락\n{symbol} ({name})\n"
+                f"현재 가격: ${price:.6g} (설정: ${thresh} 이하)"
+            )
+            mark_alert(key)
 
     # 24h 변동률
     change_pct = alerts_cfg.get("price_change_pct_24h")
