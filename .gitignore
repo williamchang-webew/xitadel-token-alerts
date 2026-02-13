@@ -1,0 +1,8 @@
+# 비밀 정보 (절대 저장소에 올리지 마세요)
+.env
+
+# 실행 시 생성되는 쿨다운 상태 (GitHub Actions는 캐시로 유지)
+alert_state.json
+
+# 설정은 선택: 개인용 값이 들어가면 제외
+# config.yaml

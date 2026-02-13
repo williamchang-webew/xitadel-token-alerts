@@ -1,0 +1,27 @@
+# 솔라나 토큰 알림 설정 예시
+# 이 파일을 config.yaml 로 복사한 뒤 값을 수정하세요.
+
+# 감시할 토큰의 Solana Mint 주소 (Contract Address)
+token_mint: "So11111111111111111111111111111111111111112"
+
+# 가격 알림 (USD)
+# 특정 가격 이상/이하 도달 시 알림
+alerts:
+  price_above: null      # 예: 100 → 가격이 $100 이상이면 알림
+  price_below: null      # 예: 0.001 → 가격이 $0.001 이하면 알림
+
+  # 가격 변동률 (%) - 24시간 기준
+  # 예: 15 → 24h 대비 ±15% 이상 변동 시 알림
+  price_change_pct_24h: null
+
+  # 거래량 알림 (USD)
+  # 24시간 거래량이 이 값 이상이면 알림
+  volume_24h_min: null   # 예: 100000
+  # 5분 거래량이 이 값 이상이면 알림 (급등/급락 감지)
+  volume_5m_min: null    # 예: 50000
+
+# 체크 간격 (초). 너무 짧으면 API 제한에 걸릴 수 있음
+check_interval_seconds: 60
+
+# 알림 쿨다운 (같은 종류 알림을 이 시간(초) 동안 한 번만 발송)
+alert_cooldown_seconds: 300

@@ -1,0 +1,38 @@
+# PC 없이 5분마다 솔라나 토큰 가격/거래량 체크 후 텔레그램 알림
+# 비용 없음, GitHub Actions 무료 할당량 사용
+
+name: Solana Token Alert
+
+on:
+  schedule:
+    # UTC 기준 5분마다 (한국 시간으로는 5분마다 +9시간)
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Restore alert state (쿨다운 유지)
+        uses: actions/cache@v4
+        with:
+          path: alert_state.json
+          key: solana-alert-state-${{ hashFiles('config.yaml') }}
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run alert check
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python alert_monitor.py --once
+    # alert_state.json 은 위 cache 단계와 동일 key 로 작업 종료 시 자동 저장됨

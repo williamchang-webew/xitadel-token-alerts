@@ -1,0 +1,16 @@
+# 솔라나 토큰 알림 설정
+# token_mint 와 alerts 값을 본인 토큰/조건에 맞게 수정하세요.
+
+# 감시할 토큰의 Solana Mint 주소 (Contract Address)
+token_mint: "So11111111111111111111111111111111111111112"
+
+# 가격 알림 (USD)
+alerts:
+  price_above: null
+  price_below: null
+  price_change_pct_24h: null
+  volume_24h_min: null
+  volume_5m_min: null
+
+check_interval_seconds: 60
+alert_cooldown_seconds: 300
