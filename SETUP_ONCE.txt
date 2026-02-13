@@ -1,0 +1,31 @@
+■ PC 안 켜도 알림 받기 – 한 번만 하면 됨
+
+1. GitHub에서 새 저장소 만들기
+   https://github.com/new
+   - Repository name: solana-token-alerts (또는 원하는 이름)
+   - Public 선택
+   - "Add a README" 등 추가 옵션 없이 Create
+
+2. 비밀값 등록 (텔레그램 봇)
+   저장소 페이지 → Settings → Secrets and variables → Actions
+   → New repository secret 두 개 추가:
+   - Name: TELEGRAM_BOT_TOKEN   Value: (봇 토큰)
+   - Name: TELEGRAM_CHAT_ID     Value: (채팅 ID)
+
+3. 이 폴더에서 푸시하기
+   PowerShell에서 이 폴더(solana-token-alerts)로 이동한 뒤:
+   .\deploy.ps1
+   나오는 입력란에 저장소 주소 붙여넣기
+   예: https://github.com/내아이디/solana-token-alerts.git
+
+4. config.yaml 수정 (선택)
+   감시할 토큰의 Mint 주소와 알림 조건을 수정한 뒤
+   git add config.yaml
+   git commit -m "Update config"
+   git push
+
+5. 동작 확인
+   GitHub 저장소 → Actions → "Solana Token Alert" → Run workflow
+   → 텔레그램으로 알림 오는지 확인 (조건 맞으면)
+
+이후에는 5분마다 자동 실행됩니다. PC 꺼도 됩니다.
